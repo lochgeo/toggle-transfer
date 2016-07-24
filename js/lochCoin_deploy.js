@@ -1,5 +1,5 @@
 var initialSupply = 10000000 /* var of type uint256 here */ ;
-var tokenName =  "L3" /* var of type string here */ ;
+var tokenName =  "L2" /* var of type string here */ ;
 var decimalUnits = 0 /* var of type uint8 here */ ;
 var tokenSymbol = "#" /* var of type string here */ ;
 
