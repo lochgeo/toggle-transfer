@@ -13,9 +13,6 @@ contract toggleCoin {
     uint gapInSeconds;
     uint amount = 100;
 
-    /* Inform clients about transfer */
-    event notifyTransfer(address indexed from, address indexed to, uint value);
-
     /* Contract constructor - called at the time of deployment */
     function toggleCoin(uint _numOfTimes, uint _gapInSeconds, address _receiver, address _addOfLochCoin) {
         acct1 = msg.sender;                    // Creator of contract is acct1
@@ -52,18 +49,15 @@ contract toggleCoin {
             // Send 100 LochCoins to acct2
             lochCoin.transferFrom(acct1, acct2, amount);
             prevSender = acct1;                    // Set PrevSender to acct1
-            notifyTransfer(acct1, acct2, amount);  // Notify anyone listening
-            togglesLeft--;
         }
         // If sender is acct2
         else { 
             // Send 100 LochCoins to acct1
             lochCoin.transferFrom(acct2, acct1, amount);
             prevSender = acct2;                      // Set PrevSender to acct2
-            notifyTransfer(acct2, acct1, amount);    // Notify anyone listening
-            togglesLeft--;
         }
         
+        togglesLeft--;
         nextTransferTime = now + gapInSeconds * 1 seconds;
     }
 

@@ -9,6 +9,7 @@ contract toggleEther {
 
     /* Private variables of the toggleEther contract */
     address prevSender;
+    uint gapInSeconds;
 
     /* Inform clients about transfer */
     event notifyTransfer(address indexed from, address indexed to, uint value);
@@ -19,7 +20,8 @@ contract toggleEther {
         etherLeft = msg.value;
         acct2 = _receiver;                     // Address of acct2
         maxToggles = _numOfTimes;              // Number of times to perform toggleEther
-        nextTransferTime = now + _gapInSeconds * 1 seconds; // Number of seconds between toggleEthers
+        gapInSeconds = _gapInSeconds;
+        nextTransferTime = now + gapInSeconds * 1 seconds; // Number of seconds between toggleEthers
     }
 
     /* Modifier to check if we have crossed the min wait time */
@@ -49,7 +51,6 @@ contract toggleEther {
             if(acct2.send(amount)){
                 prevSender = acct1;                    // Set PrevSender to acct1
                 notifyTransfer(acct1, acct2, amount);  // Notify anyone listening
-                maxToggles--;
             }
         }
         // If sender is acct2
@@ -58,10 +59,11 @@ contract toggleEther {
             if(acct1.send(amount)){
                 prevSender = acct2;                      // Set PrevSender to acct2
                 notifyTransfer(acct2, acct1, amount);    // Notify anyone listening
-                maxToggles--;
             }
         }
         
+        maxToggles--;
+        nextTransferTime = now + gapInSeconds * 1 seconds; 
         etherLeft = this.balance;
     }
 

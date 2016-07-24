@@ -22,7 +22,6 @@ contract MyToken {
         name = tokenName;                                   // Set the name for display purposes
         symbol = tokenSymbol;                               // Set the symbol for display purposes
         decimals = decimalUnits;                            // Amount of decimals for display purposes
-        msg.sender.send(msg.value);                         // Send back any ether sent accidentally
     }
 
     /* Send coins */
