@@ -14,7 +14,7 @@ contract accountRegistry2{
     mapping(address => acc_det[]) accountsMap;
     mapping(address => t_hashes[]) t_hashMap;
 
-    event NotifyResult(address indexed seller, string result);
+    event NotifyResult(address seller, string result);
         
     function StoreAccount(address seller, string account_number, string account_name) returns(string result) {  
         
@@ -45,6 +45,9 @@ contract accountRegistry2{
     
     function Authorize(address seller, string buyer_email, string account_number) returns(string result) {
 
+        result = toString(seller);
+        NotifyResult(seller, result);
+
         if(msg.sender != seller) {
             throw;
         }
@@ -67,21 +70,10 @@ contract accountRegistry2{
 
             //If match found
             if(matchKey == 0){
-               
+                              
                 current_hash =  sha3(seller, buyer_email, account_number);
                 uint t_hashLen = t_hashMap[msg.sender].length;
                 
-                if(t_hashLen != 0) {
-                    for(uint j =0; j<= t_hashLen -1; j++) {
-                        if(current_hash == t_hashMap[msg.sender][i].t_hashKey){
-                            result = "Buyer Already Authorised";
-                            NotifyResult(seller, result);
-                            return result;
-                        }
-                        else continue;
-                    }
-                }
-
                 t_hashMap[msg.sender].push(t_hashes(current_hash));
                 result = "Buyer Authorised";
                 NotifyResult(seller, result);
@@ -167,5 +159,12 @@ contract accountRegistry2{
             return 1;
         else
             return 0;
+    }
+
+    function toString(address x) private returns (string) {
+        bytes memory b = new bytes(20);
+        for (uint i = 0; i < 20; i++)
+            b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
+        return string(b);
     }
 }
